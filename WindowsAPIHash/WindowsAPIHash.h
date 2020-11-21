@@ -60,37 +60,16 @@ namespace WINAPIHash {
         return hash;
     }
 
-    template <typename WSTR, typename STR> requires requires(WSTR wstr, STR sstr) {
-        std::is_base_of_v<std::wstring, WSTR> || std::is_convertible_v<WSTR, std::wstring>;
-        std::is_base_of_v<std::string, STR> || std::is_convertible_v<STR, std::string>;
-    }
-    uint64_t GetAPIHash(WSTR&& library, STR&& function) {
-        return (hash(WINAPIHash::toUpperCase(std::wstring{ library }).c_str()) + hash(std::string{ function }.c_str())) & 0xFFFFFFFF;
+    std::wstring toWString(std::string str) {
+        return std::wstring(CStringW(str.c_str()));
     }
 
-    template < _8BitsTy T>
-    uint64_t GetAPIHash(std::string&& library, T function[]) {
-        std::string function_str(function);
-        return GetAPIHash(library, function_str);
+    uint64_t GetAPIHash(std::wstring library, std::string function) {
+        return (hash(WINAPIHash::toUpperCase(library).c_str()) + hash(function.c_str())) & 0xFFFFFFFF;
     }
 
-    template <>
-    uint64_t GetAPIHash<std::string>(std::string&& library, std::string&& function) {
-        CStringW cstringw(library.c_str());
-        return GetAPIHash(std::wstring{ cstringw }, function);
-    }
-
-    template<_8BitsTy T1, _8BitsTy T2>
-    uint64_t GetAPIHash(T1 library[], T2 function[]) {
-        CStringW cstringw(library);
-        return GetAPIHash(std::wstring{ cstringw }, std::string{ function });
-    }
-
-    template<_16BitsTy T1, _8BitsTy T2>
-    uint64_t GetAPIHash(T1 library[], T2 function[]) {
-        std::wstring library_wstr{ library };
-        std::string function_str{ function };
-        return GetAPIHash(library_wstr, function_str);
+    uint64_t GetAPIHash(std::string library, std::string function) {
+        return WINAPIHash::GetAPIHash(WINAPIHash::toWString(library), function);
     }
 
 }
