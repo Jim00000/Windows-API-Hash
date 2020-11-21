@@ -8,6 +8,5 @@
 #define PCH_H
 
 // 請於此新增您要先行編譯的標頭
-#include <WindowsAPIHash.h>
 
 #endif //PCH_H
