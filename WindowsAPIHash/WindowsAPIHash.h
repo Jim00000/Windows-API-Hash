@@ -6,6 +6,7 @@
 #include <type_traits>
 #include <locale>
 #include <concepts>
+#include <bit>
 
 #if defined(_WIN32) || defined(_WIN64)
 
@@ -40,7 +41,7 @@ namespace WINAPIHash {
         for (size_t i = 0; i < std::char_traits<T>::length(str); i++) {
             hash = static_cast<uint32_t>(str[i]) + _rotr(hash, 0xD);
         }
-        hash = _rotr(hash, 0xD);
+        hash = std::rotr(hash, 0xD);
         return hash;
     }
 
@@ -54,8 +55,8 @@ namespace WINAPIHash {
             hash = static_cast<uint32_t>(*secondByte) + _rotr(hash, 0xD);
         }
         // For last two '\x00'
-        hash = _rotr(hash, 0xD);
-        hash = _rotr(hash, 0xD);
+        hash = std::rotr(hash, 0xD);
+        hash = std::rotr(hash, 0xD);
 
         return hash;
     }
