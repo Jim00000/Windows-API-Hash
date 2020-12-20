@@ -39,7 +39,7 @@ namespace WINAPIHash {
     uint64_t hash(const T str[]) {
         uint32_t hash = 0;
         for (size_t i = 0; i < std::char_traits<T>::length(str); i++) {
-            hash = static_cast<uint32_t>(str[i]) + _rotr(hash, 0xD);
+            hash = static_cast<uint32_t>(str[i]) + std::rotr(hash, 0xD);
         }
         hash = std::rotr(hash, 0xD);
         return hash;
@@ -51,8 +51,8 @@ namespace WINAPIHash {
         for (size_t i = 0; i < std::char_traits<T>::length(str); i++) {
             char8_t* firstByte = (char8_t*)(&str[i]);
             char8_t* secondByte = firstByte + 1;
-            hash = static_cast<uint32_t>(*firstByte) + _rotr(hash, 0xD);
-            hash = static_cast<uint32_t>(*secondByte) + _rotr(hash, 0xD);
+            hash = static_cast<uint32_t>(*firstByte) + std::rotr(hash, 0xD);
+            hash = static_cast<uint32_t>(*secondByte) + std::rotr(hash, 0xD);
         }
         // For last two '\x00'
         hash = std::rotr(hash, 0xD);
